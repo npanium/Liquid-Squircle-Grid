@@ -1,3 +1,5 @@
+## Demo: https://npanium.github.io/Liquid-Squircle-Grid/
+
 # Liquid Squircle Grid
 
 An interactive WebGL visualization featuring animated squircle shapes arranged in a customizable grid with liquid-like morphing effects.
