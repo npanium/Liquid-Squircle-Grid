@@ -1,306 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Liquid Squircle Grid</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background: #000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            cursor: grab;
-        }
-        
-        canvas:active {
-            cursor: grabbing;
-        }
-        
-        .controls {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 12px;
-            color: white;
-            min-width: 260px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            z-index: 100;
-            transition: all 0.3s ease;
-        }
-        
-        .controls.collapsed {
-            padding: 12px 20px;
-        }
-        
-        .controls-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            cursor: pointer;
-            user-select: none;
-        }
-        
-        .controls.collapsed .controls-header {
-            margin-bottom: 0;
-        }
-        
-        .toggle-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 12px;
-            color: #00ffff;
-            transition: all 0.2s ease;
-        }
-        
-        .toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .controls-content {
-            max-height: 1000px;
-            overflow: hidden;
-            transition: max-height 0.3s ease, opacity 0.3s ease;
-            opacity: 1;
-        }
-        
-        .controls.collapsed .controls-content {
-            max-height: 0;
-            opacity: 0;
-        }
-        
-        .controls h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .control-group {
-            margin-bottom: 15px;
-        }
-        
-        .control-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 12px;
-            color: #ccc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .control-group .value {
-            color: #fff;
-            font-weight: 600;
-            font-size: 13px;
-        }
-        
-        .control-group input[type="range"] {
-            width: 100%;
-            height: 5px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.2);
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .control-group input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #00ffff;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 255, 255, 0.5);
-        }
-        
-        .control-group input[type="range"]::-moz-range-thumb {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #00ffff;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 8px rgba(0, 255, 255, 0.5);
-        }
-        
-        .info {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 12px 16px;
-            border-radius: 8px;
-            color: #ccc;
-            font-size: 11px;
-        }
-        
-        .info strong {
-            color: #fff;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: grab;
+      }
+
+      canvas:active {
+        cursor: grabbing;
+      }
+
+      .controls {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 12px;
+        color: white;
+        min-width: 260px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        transition: all 0.3s ease;
+      }
+
+      .controls.collapsed {
+        padding: 16px;
+        min-width: auto;
+      }
+
+      .controls-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .controls.collapsed .controls-header {
+        margin-bottom: 0;
+      }
+
+      .toggle-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        padding: 4px 8px;
+        cursor: pointer;
+        font-size: 12px;
+        color: #00ffff;
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        width: 24px;
+        height: 24px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .toggle-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .hamburger-line {
+        width: 16px;
+        height: 2px;
+        background: #00ffff;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .controls:not(.collapsed) .hamburger-line {
+        display: none;
+      }
+
+      .controls h3 {
+        transition: opacity 0.3s ease;
+      }
+
+      .controls.collapsed h3 {
+        opacity: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+
+      .controls-content {
+        max-height: 1000px;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
+        opacity: 1;
+      }
+
+      .controls.collapsed .controls-content {
+        max-height: 0;
+        opacity: 0;
+      }
+
+      .controls h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .control-group {
+        margin-bottom: 15px;
+      }
+
+      .control-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 12px;
+        color: #ccc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .control-group .value {
+        color: #fff;
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      .control-group input[type="range"] {
+        width: 100%;
+        height: 5px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.2);
+        outline: none;
+        -webkit-appearance: none;
+      }
+
+      .control-group input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #00ffff;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 255, 255, 0.5);
+      }
+
+      .control-group input[type="range"]::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #00ffff;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 255, 255, 0.5);
+      }
+
+      .info {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 12px 16px;
+        border-radius: 8px;
+        color: #ccc;
+        font-size: 11px;
+      }
+
+      .info strong {
+        color: #fff;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <canvas id="glCanvas"></canvas>
-    
+
     <div class="controls" id="controls">
-        <div class="controls-header" id="controlsHeader">
-            <h3>Liquid Squircle Grid</h3>
-            <button class="toggle-btn" id="toggleBtn">Hide</button>
+      <div class="controls-header" id="controlsHeader">
+        <h3>Liquid Squircle Grid</h3>
+        <button class="toggle-btn" id="toggleBtn">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+
+      <div class="controls-content">
+        <div class="control-group">
+          <label>
+            <span>Grid Size</span>
+            <span class="value" id="gridValue">3x3</span>
+          </label>
+          <input
+            type="range"
+            id="gridSize"
+            min="1"
+            max="5"
+            step="1"
+            value="3"
+          />
         </div>
-        
-        <div class="controls-content">
-            <div class="control-group">
-                <label>
-                    <span>Grid Size</span>
-                    <span class="value" id="gridValue">3x3</span>
-                </label>
-                <input type="range" id="gridSize" min="1" max="5" step="1" value="3">
-            </div>
-            
-            <div class="control-group">
-                <label>
-                    <span>Scale</span>
-                    <span class="value" id="scaleValue">1.0</span>
-                </label>
-                <input type="range" id="scale" min="0.1" max="5" step="0.1" value="1.0">
-            </div>
-            
-            <div class="control-group">
-                <label>
-                    <span>Morphing</span>
-                    <span class="value" id="morphValue">1.0</span>
-                </label>
-                <input type="range" id="morph" min="0" max="2" step="0.1" value="1.0">
-            </div>
-            
-            <div class="control-group">
-                <label>
-                    <span>Spacing</span>
-                    <span class="value" id="spacingValue">2.0</span>
-                </label>
-                <input type="range" id="spacing" min="1" max="15" step="0.5" value="2.0">
-            </div>
-            
-            <div class="control-group">
-                <label>
-                    <span>Layers</span>
-                    <span class="value" id="layersValue">0.4</span>
-                </label>
-                <input type="range" id="layers" min="0.1" max="3" step="0.1" value="0.4">
-            </div>
-            
-            <div class="control-group">
-                <label>
-                    <span>Random Hue</span>
-                    <span class="value" id="randomHueValue">0.5</span>
-                </label>
-                <input type="range" id="randomHue" min="0" max="1" step="0.1" value="0.5">
-            </div>
-            
-            <div class="control-group">
-                <label>
-                    <span>Color Intensity</span>
-                    <span class="value" id="colorValue">1.0</span>
-                </label>
-                <input type="range" id="color" min="0.1" max="3" step="0.1" value="1.0">
-            </div>
-            
-            <div class="control-group">
-                <label>
-                    <span>Detail</span>
-                    <span class="value" id="detailValue">80</span>
-                </label>
-                <input type="range" id="detail" min="30" max="120" step="10" value="80">
-            </div>
+
+        <div class="control-group">
+          <label>
+            <span>Scale</span>
+            <span class="value" id="scaleValue">1.0</span>
+          </label>
+          <input
+            type="range"
+            id="scale"
+            min="0.1"
+            max="5"
+            step="0.1"
+            value="1.0"
+          />
         </div>
+
+        <div class="control-group">
+          <label>
+            <span>Morphing</span>
+            <span class="value" id="morphValue">1.0</span>
+          </label>
+          <input
+            type="range"
+            id="morph"
+            min="0"
+            max="2"
+            step="0.1"
+            value="1.0"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Spacing</span>
+            <span class="value" id="spacingValue">2.0</span>
+          </label>
+          <input
+            type="range"
+            id="spacing"
+            min="1"
+            max="15"
+            step="0.5"
+            value="2.0"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Layers</span>
+            <span class="value" id="layersValue">0.4</span>
+          </label>
+          <input
+            type="range"
+            id="layers"
+            min="0.1"
+            max="3"
+            step="0.1"
+            value="0.4"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Random Hue</span>
+            <span class="value" id="randomHueValue">0.5</span>
+          </label>
+          <input
+            type="range"
+            id="randomHue"
+            min="0"
+            max="1"
+            step="0.1"
+            value="0.5"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Color Intensity</span>
+            <span class="value" id="colorValue">1.0</span>
+          </label>
+          <input
+            type="range"
+            id="color"
+            min="0.1"
+            max="3"
+            step="0.1"
+            value="1.0"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Radius</span>
+            <span class="value" id="radiusValue">2.0</span>
+          </label>
+          <input
+            type="range"
+            id="radius"
+            min="1"
+            max="4"
+            step="0.1"
+            value="2.0"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>
+            <span>Detail</span>
+            <span class="value" id="detailValue">80</span>
+          </label>
+          <input
+            type="range"
+            id="detail"
+            min="30"
+            max="120"
+            step="10"
+            value="80"
+          />
+        </div>
+        <div class="info">
+          <strong>Liquid Squircle Grid</strong><br />
+          Original by Jaenam (Shadertoy)<br />
+          <span style="color: #00ffff">Drag to rotate • Scroll to scale</span>
+        </div>
+      </div>
     </div>
-    
-    <div class="info">
-        <strong>Liquid Squircle Grid</strong><br>
-        Original by Jaenam (Shadertoy)<br>
-        <span style="color: #00ffff;">Drag to rotate • Scroll to scale</span>
-    </div>
-    
+
     <script>
-        const canvas = document.getElementById('glCanvas');
-        const gl = canvas.getContext('webgl', { 
-            alpha: false,
-            antialias: true,
-            preserveDrawingBuffer: false
-        }) || canvas.getContext('experimental-webgl', {
-            alpha: false,
-            antialias: true,
-            preserveDrawingBuffer: false
+      const canvas = document.getElementById("glCanvas");
+      const gl =
+        canvas.getContext("webgl", {
+          alpha: false,
+          antialias: true,
+          preserveDrawingBuffer: false,
+        }) ||
+        canvas.getContext("experimental-webgl", {
+          alpha: false,
+          antialias: true,
+          preserveDrawingBuffer: false,
         });
-        
-        if (!gl) {
-            document.body.innerHTML = '<div style="color: white; padding: 40px; text-align: center;"><h2>WebGL not supported</h2><p>Your browser does not support WebGL</p></div>';
-            throw new Error('WebGL not supported');
-        }
-        
-        console.log('WebGL Version:', gl.getParameter(gl.VERSION));
-        console.log('GLSL Version:', gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
-        
-        // Resize canvas
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        
-        // Shader parameters
-        let gridSize = 3;
-        let scale = 1.0;
-        let morphing = 1.0;
-        let spacing = 2.0;
-        let layers = 0.4;
-        let randomHue = 0.5;
-        let colorIntensity = 1.0;
-        let maxIterations = 80;
-        
-        // Mouse rotation control
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetRotationX = 0;
-        let targetRotationY = 0;
-        let currentRotationX = 0;
-        let currentRotationY = 0;
-        let isDragging = false;
-        
-        // Vertex shader
-        const vertexShaderSource = `
+
+      if (!gl) {
+        document.body.innerHTML =
+          '<div style="color: white; padding: 40px; text-align: center;"><h2>WebGL not supported</h2><p>Your browser does not support WebGL</p></div>';
+        throw new Error("WebGL not supported");
+      }
+
+      console.log("WebGL Version:", gl.getParameter(gl.VERSION));
+      console.log(
+        "GLSL Version:",
+        gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
+      );
+
+      // Resize canvas
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      // Shader parameters
+      let gridSize = 3;
+      let scale = 1.0;
+      let morphing = 1.0;
+      let spacing = 2.0;
+      let layers = 0.4;
+      let randomHue = 0.5;
+      let colorIntensity = 1.0;
+      let radius = 2.0;
+      let maxIterations = 80;
+
+      // Mouse rotation control
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetRotationX = 0;
+      let targetRotationY = 0;
+      let currentRotationX = 0;
+      let currentRotationY = 0;
+      let isDragging = false;
+
+      // Vertex shader
+      const vertexShaderSource = `
             attribute vec2 position;
             void main() {
                 gl_Position = vec4(position, 0.0, 1.0);
             }
         `;
-        
-        // Fragment shader with 3D grid
-        const fragmentShaderSource = `
+
+      // Fragment shader with 3D grid
+      const fragmentShaderSource = `
             precision highp float;
             uniform vec2 iResolution;
             uniform float iTime;
@@ -313,6 +422,7 @@
             uniform float uSpacing;
             uniform float uLayers;
             uniform float uRandomHue;
+            uniform float uRadius;
             
             mat2 rot(float a) {
                 float c = cos(a);
@@ -395,8 +505,8 @@
                     
                     // Distance field on repeated space
                     float morph = uMorph;
-                    float dist = sin(length(pg * pg) / uLayers) * morph;
-                    float clampDist = clamp(length(pg * pg) - 4.0, 0.0, 2.0);
+                    float dist = sin(length(pow(abs(pg), vec3(uRadius))) / uLayers) * morph;
+                    float clampDist = clamp(length(pow(abs(pg), vec3(uRadius))) - 4.0, 0.0, 2.0);
                     s = 0.012 + 0.07 * abs(max(dist, clampDist) - i / 100.0);
                     d += s;
                     
@@ -419,217 +529,233 @@
                 gl_FragColor = O;
             }
         `;
-        
-        // Compile shader
-        function compileShader(source, type) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                const info = gl.getShaderInfoLog(shader);
-                console.error('Shader compile error:', info);
-                gl.deleteShader(shader);
-                return null;
-            }
-            return shader;
+
+      // Compile shader
+      function compileShader(source, type) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          const info = gl.getShaderInfoLog(shader);
+          console.error("Shader compile error:", info);
+          gl.deleteShader(shader);
+          return null;
         }
-        
-        // Create program
-        const vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
-        const fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER);
-        
-        if (!vertexShader || !fragmentShader) {
-            throw new Error('Shader compilation failed');
+        return shader;
+      }
+
+      // Create program
+      const vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
+      const fragmentShader = compileShader(
+        fragmentShaderSource,
+        gl.FRAGMENT_SHADER
+      );
+
+      if (!vertexShader || !fragmentShader) {
+        throw new Error("Shader compilation failed");
+      }
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        const info = gl.getProgramInfoLog(program);
+        console.error("Program link error:", info);
+        throw new Error("Program linking failed");
+      }
+
+      gl.useProgram(program);
+
+      // Set up geometry
+      const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+      const positionLocation = gl.getAttribLocation(program, "position");
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+      // Get uniform locations
+      const iResolutionLocation = gl.getUniformLocation(program, "iResolution");
+      const iTimeLocation = gl.getUniformLocation(program, "iTime");
+      const scaleLocation = gl.getUniformLocation(program, "uScale");
+      const morphLocation = gl.getUniformLocation(program, "uMorph");
+      const colorLocation = gl.getUniformLocation(program, "uColorIntensity");
+      const iterationsLocation = gl.getUniformLocation(
+        program,
+        "uMaxIterations"
+      );
+      const rotationLocation = gl.getUniformLocation(program, "uRotation");
+      const gridSizeLocation = gl.getUniformLocation(program, "uGridSize");
+      const spacingLocation = gl.getUniformLocation(program, "uSpacing");
+      const layersLocation = gl.getUniformLocation(program, "uLayers");
+      const randomHueLocation = gl.getUniformLocation(program, "uRandomHue");
+      const radiusLocation = gl.getUniformLocation(program, "uRadius");
+
+      // Animation
+      let startTime = Date.now();
+
+      function render() {
+        const currentTime = (Date.now() - startTime) / 1000.0;
+
+        // Smooth rotation interpolation
+        currentRotationX += (targetRotationX - currentRotationX) * 0.1;
+        currentRotationY += (targetRotationY - currentRotationY) * 0.1;
+
+        gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
+        gl.uniform1f(iTimeLocation, currentTime);
+        gl.uniform1f(scaleLocation, scale);
+        gl.uniform1f(morphLocation, morphing);
+        gl.uniform1f(colorLocation, colorIntensity);
+        gl.uniform1f(iterationsLocation, maxIterations);
+        gl.uniform2f(rotationLocation, currentRotationX, currentRotationY);
+        gl.uniform1i(gridSizeLocation, gridSize);
+        gl.uniform1f(spacingLocation, spacing);
+        gl.uniform1f(layersLocation, layers);
+        gl.uniform1f(randomHueLocation, randomHue);
+        gl.uniform1f(radiusLocation, radius);
+
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+        requestAnimationFrame(render);
+      }
+
+      render();
+
+      // Mouse controls
+      canvas.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+          const deltaX = e.clientX - mouseX;
+          const deltaY = e.clientY - mouseY;
+
+          targetRotationY += deltaX * 0.01;
+          targetRotationX += deltaY * 0.01;
+
+          mouseX = e.clientX;
+          mouseY = e.clientY;
         }
-        
-        const program = gl.createProgram();
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
-        gl.linkProgram(program);
-        
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            const info = gl.getProgramInfoLog(program);
-            console.error('Program link error:', info);
-            throw new Error('Program linking failed');
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        isDragging = false;
+      });
+
+      canvas.addEventListener("mouseleave", () => {
+        isDragging = false;
+      });
+
+      // Touch controls
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      canvas.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
         }
-        
-        gl.useProgram(program);
-        
-        // Set up geometry
-        const vertices = new Float32Array([
-            -1, -1,
-             1, -1,
-            -1,  1,
-             1,  1
-        ]);
-        
-        const buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-        
-        const positionLocation = gl.getAttribLocation(program, 'position');
-        gl.enableVertexAttribArray(positionLocation);
-        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-        
-        // Get uniform locations
-        const iResolutionLocation = gl.getUniformLocation(program, 'iResolution');
-        const iTimeLocation = gl.getUniformLocation(program, 'iTime');
-        const scaleLocation = gl.getUniformLocation(program, 'uScale');
-        const morphLocation = gl.getUniformLocation(program, 'uMorph');
-        const colorLocation = gl.getUniformLocation(program, 'uColorIntensity');
-        const iterationsLocation = gl.getUniformLocation(program, 'uMaxIterations');
-        const rotationLocation = gl.getUniformLocation(program, 'uRotation');
-        const gridSizeLocation = gl.getUniformLocation(program, 'uGridSize');
-        const spacingLocation = gl.getUniformLocation(program, 'uSpacing');
-        const layersLocation = gl.getUniformLocation(program, 'uLayers');
-        const randomHueLocation = gl.getUniformLocation(program, 'uRandomHue');
-        
-        // Animation
-        let startTime = Date.now();
-        
-        function render() {
-            const currentTime = (Date.now() - startTime) / 1000.0;
-            
-            // Smooth rotation interpolation
-            currentRotationX += (targetRotationX - currentRotationX) * 0.1;
-            currentRotationY += (targetRotationY - currentRotationY) * 0.1;
-            
-            gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
-            gl.uniform1f(iTimeLocation, currentTime);
-            gl.uniform1f(scaleLocation, scale);
-            gl.uniform1f(morphLocation, morphing);
-            gl.uniform1f(colorLocation, colorIntensity);
-            gl.uniform1f(iterationsLocation, maxIterations);
-            gl.uniform2f(rotationLocation, currentRotationX, currentRotationY);
-            gl.uniform1i(gridSizeLocation, gridSize);
-            gl.uniform1f(spacingLocation, spacing);
-            gl.uniform1f(layersLocation, layers);
-            gl.uniform1f(randomHueLocation, randomHue);
-            
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-            
-            requestAnimationFrame(render);
+      });
+
+      canvas.addEventListener("touchmove", (e) => {
+        if (isDragging && e.touches.length === 1) {
+          const deltaX = e.touches[0].clientX - touchStartX;
+          const deltaY = e.touches[0].clientY - touchStartY;
+
+          targetRotationY += deltaX * 0.01;
+          targetRotationX += deltaY * 0.01;
+
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
         }
-        
-        render();
-        
-        // Mouse controls
-        canvas.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-        
-        canvas.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const deltaX = e.clientX - mouseX;
-                const deltaY = e.clientY - mouseY;
-                
-                targetRotationY += deltaX * 0.01;
-                targetRotationX += deltaY * 0.01;
-                
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            }
-        });
-        
-        canvas.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-        
-        canvas.addEventListener('mouseleave', () => {
-            isDragging = false;
-        });
-        
-        // Touch controls
-        let touchStartX = 0;
-        let touchStartY = 0;
-        
-        canvas.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) {
-                isDragging = true;
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            }
-        });
-        
-        canvas.addEventListener('touchmove', (e) => {
-            if (isDragging && e.touches.length === 1) {
-                const deltaX = e.touches[0].clientX - touchStartX;
-                const deltaY = e.touches[0].clientY - touchStartY;
-                
-                targetRotationY += deltaX * 0.01;
-                targetRotationX += deltaY * 0.01;
-                
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            }
-        });
-        
-        canvas.addEventListener('touchend', () => {
-            isDragging = false;
-        });
-        
-        // Mouse wheel scale
-        canvas.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            scale += e.deltaY * 0.001;
-            scale = Math.max(0.1, Math.min(5, scale));
-            document.getElementById('scale').value = scale;
-            document.getElementById('scaleValue').textContent = scale.toFixed(1);
-        }, { passive: false });
-        
-        // Collapse/expand controls
-        const controlsEl = document.getElementById('controls');
-        const controlsHeader = document.getElementById('controlsHeader');
-        const toggleBtn = document.getElementById('toggleBtn');
-        
-        controlsHeader.addEventListener('click', () => {
-            controlsEl.classList.toggle('collapsed');
-            toggleBtn.textContent = controlsEl.classList.contains('collapsed') ? 'Show' : 'Hide';
-        });
-        
-        // Controls
-        document.getElementById('gridSize').addEventListener('input', (e) => {
-            gridSize = parseInt(e.target.value);
-            document.getElementById('gridValue').textContent = gridSize + 'x' + gridSize;
-        });
-        
-        document.getElementById('scale').addEventListener('input', (e) => {
-            scale = parseFloat(e.target.value);
-            document.getElementById('scaleValue').textContent = scale.toFixed(1);
-        });
-        
-        document.getElementById('morph').addEventListener('input', (e) => {
-            morphing = parseFloat(e.target.value);
-            document.getElementById('morphValue').textContent = morphing.toFixed(1);
-        });
-        
-        document.getElementById('spacing').addEventListener('input', (e) => {
-            spacing = parseFloat(e.target.value);
-            document.getElementById('spacingValue').textContent = spacing.toFixed(1);
-        });
-        
-        document.getElementById('layers').addEventListener('input', (e) => {
-            layers = parseFloat(e.target.value);
-            document.getElementById('layersValue').textContent = layers.toFixed(1);
-        });
-        
-        document.getElementById('randomHue').addEventListener('input', (e) => {
-            randomHue = parseFloat(e.target.value);
-            document.getElementById('randomHueValue').textContent = randomHue.toFixed(1);
-        });
-        
-        document.getElementById('color').addEventListener('input', (e) => {
-            colorIntensity = parseFloat(e.target.value);
-            document.getElementById('colorValue').textContent = colorIntensity.toFixed(1);
-        });
-        
-        document.getElementById('detail').addEventListener('input', (e) => {
-            maxIterations = parseFloat(e.target.value);
-            document.getElementById('detailValue').textContent = Math.round(maxIterations);
-        });
+      });
+
+      canvas.addEventListener("touchend", () => {
+        isDragging = false;
+      });
+
+      // Mouse wheel scale
+      canvas.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          scale += e.deltaY * 0.001;
+          scale = Math.max(0.1, Math.min(5, scale));
+          document.getElementById("scale").value = scale;
+          document.getElementById("scaleValue").textContent = scale.toFixed(1);
+        },
+        { passive: false }
+      );
+
+      // Collapse/expand controls
+      const controlsEl = document.getElementById("controls");
+      const controlsHeader = document.getElementById("controlsHeader");
+      const toggleBtn = document.getElementById("toggleBtn");
+
+      controlsHeader.addEventListener("click", () => {
+        controlsEl.classList.toggle("collapsed");
+      });
+
+      // Controls
+      document.getElementById("gridSize").addEventListener("input", (e) => {
+        gridSize = parseInt(e.target.value);
+        const displayValue = gridSize * 2 - 1;
+        document.getElementById("gridValue").textContent =
+          displayValue + "x" + displayValue;
+      });
+      document.getElementById("scale").addEventListener("input", (e) => {
+        scale = parseFloat(e.target.value);
+        document.getElementById("scaleValue").textContent = scale.toFixed(1);
+      });
+
+      document.getElementById("morph").addEventListener("input", (e) => {
+        morphing = parseFloat(e.target.value);
+        document.getElementById("morphValue").textContent = morphing.toFixed(1);
+      });
+
+      document.getElementById("spacing").addEventListener("input", (e) => {
+        spacing = parseFloat(e.target.value);
+        document.getElementById("spacingValue").textContent =
+          spacing.toFixed(1);
+      });
+
+      document.getElementById("layers").addEventListener("input", (e) => {
+        layers = parseFloat(e.target.value);
+        document.getElementById("layersValue").textContent = layers.toFixed(1);
+      });
+
+      document.getElementById("randomHue").addEventListener("input", (e) => {
+        randomHue = parseFloat(e.target.value);
+        document.getElementById("randomHueValue").textContent =
+          randomHue.toFixed(1);
+      });
+
+      document.getElementById("color").addEventListener("input", (e) => {
+        colorIntensity = parseFloat(e.target.value);
+        document.getElementById("colorValue").textContent =
+          colorIntensity.toFixed(1);
+      });
+
+      document.getElementById("radius").addEventListener("input", (e) => {
+        radius = parseFloat(e.target.value);
+        document.getElementById("radiusValue").textContent = radius.toFixed(1);
+      });
+
+      document.getElementById("detail").addEventListener("input", (e) => {
+        maxIterations = parseFloat(e.target.value);
+        document.getElementById("detailValue").textContent =
+          Math.round(maxIterations);
+      });
     </script>
-</body>
+  </body>
 </html>
