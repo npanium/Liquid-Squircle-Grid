@@ -12,24 +12,25 @@ An interactive WebGL visualization featuring animated squircle shapes arranged i
 
 ## Controls
 
-- **Grid Size** (1-5) - Number of squircles per row/column
+- **Grid Size** (1-5) - Number of squircles per row/column (displays as 1x1, 3x3, 5x5, 7x7, 9x9)
 - **Scale** (0.1-5) - Overall zoom level
 - **Morphing** (0-2) - Animation intensity
 - **Spacing** (1-15) - Distance between squircles
 - **Layers** (0.1-3) - Visual depth layers
 - **Random Hue** (0-1) - Color variation amount
 - **Color Intensity** (0.1-3) - Saturation and brightness
-- **Detail** (10-80) - Ray marching iterations (affects performance)
+- **Radius** (1-4) - Shape curvature (lower = rounder, higher = squarer)
+- **Detail** (30-120) - Ray marching iterations (affects performance)
 
 ## Usage
 
-Simply open `liquid-squircle-grid-2.html` in a modern web browser. No build process or dependencies required.
+Simply open `index.html` in a modern web browser. No build process or dependencies required.
 
 **Interaction:**
 - Click and drag to rotate
 - Scroll to zoom in/out
 - Use sliders to adjust visual parameters
-- Click header to collapse/expand controls
+- Click hamburger menu (☰) to collapse/expand controls
 
 ## Technical Details
 
