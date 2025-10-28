@@ -49,6 +49,7 @@
       .controls.collapsed {
         padding: 16px;
         min-width: auto;
+        width: 56px;
       }
 
       .controls-header {
@@ -95,7 +96,7 @@
       }
 
       .controls:not(.collapsed) .hamburger-line {
-        display: none;
+        display: block;
       }
 
       .controls h3 {
@@ -140,7 +141,8 @@
         align-items: center;
       }
 
-      .control-group .value {
+      .control-group .value,
+      a {
         color: #fff;
         font-weight: 600;
         font-size: 13px;
@@ -186,6 +188,9 @@
 
       .info strong {
         color: #fff;
+      }
+      a {
+        text-decoration: none;
       }
     </style>
   </head>
@@ -341,6 +346,9 @@
           <strong>Liquid Squircle Grid</strong><br />
           Original by Jaenam (Shadertoy)<br />
           <span style="color: #00ffff">Drag to rotate • Scroll to scale</span>
+        </div>
+        <div style="padding-top: 1rem">
+          <a href="https://github.com/npanium/Liquid-Squircle-Grid/">Github </a>
         </div>
       </div>
     </div>
