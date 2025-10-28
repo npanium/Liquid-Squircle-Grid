@@ -42,4 +42,4 @@ Requires WebGL support. Works best in Chrome, Firefox, Safari, and Edge.
 
 ## Credits
 
-Original shader concept by **@XorDev** on Shadertoy. Adapted and enhanced with interactive controls and 3D rotation.
+Original shader concept by **Jaenam** on Shadertoy. Adapted and enhanced with interactive controls and 3D rotation.
